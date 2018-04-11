@@ -105,7 +105,7 @@ class NucleusConfig(Config):
     NAME = "nucleus"
 
     # Adjust depending on your GPU memory
-    IMAGES_PER_GPU = 20
+    IMAGES_PER_GPU = 12
 
     # Number of classes (including background)
     NUM_CLASSES = 1 + 1  # Background + nucleus
