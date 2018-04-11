@@ -489,7 +489,7 @@ if __name__ == '__main__':
 
     # Train or evaluate
     if args.command == "train":
-        train(model, [args.epoch_head, args.epoch_all])
+        train(model, [int(args.epoch_head), int(args.epoch_all)])
     elif args.command == "detect":
         detect(model, args.dataset, args.subset)
     else:
