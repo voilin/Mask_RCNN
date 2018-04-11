@@ -426,8 +426,11 @@ if __name__ == '__main__':
     parser.add_argument('--mask_weight', required=False,
                         metavar=3,
                         help="weight for mask loss")
-    parser.add_argument('--epoch', required=False,
-                        metavar=[20, 40],
+    parser.add_argument('--epoch_head', required=False,
+                        metavar=20,
+                        help="epoch for training heads and all")
+    parser.add_argument('--epoch_all', required=False,
+                        metavar=40,
                         help="epoch for training heads and all")
     args = parser.parse_args()
 
@@ -453,10 +456,10 @@ if __name__ == '__main__':
     # Create model
     if args.command == "train":
         model = modellib.MaskRCNN_mask(mode="training", config=config,
-                                       model_dir=args.logs, mask_weight=args.mask_weight)
+                                       model_dir=args.logs, mask_weight=int(args.mask_weight))
     else:
         model = modellib.MaskRCNN_mask(mode="inference", config=config,
-                                       model_dir=args.logs, mask_weight=args.mask_weight)
+                                       model_dir=args.logs, mask_weight=int(args.mask_weight))
 
     # Select weights file to load
     if args.weights.lower() == "coco":
@@ -486,7 +489,7 @@ if __name__ == '__main__':
 
     # Train or evaluate
     if args.command == "train":
-        train(model, args.epoch)
+        train(model, [args.epoch_head, args.epoch_all])
     elif args.command == "detect":
         detect(model, args.dataset, args.subset)
     else:
