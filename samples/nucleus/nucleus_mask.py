@@ -251,7 +251,7 @@ class NucleusDataset(utils.Dataset):
 #  Training
 ############################################################
 
-def train(model):
+def train(model, epoch):
     """Train the model."""
     # Training dataset.
     dataset_train = NucleusDataset()
@@ -282,14 +282,14 @@ def train(model):
     print("Train network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=20,
+                epochs=epoch[0],
                 augmentation=augmentation,
                 layers='heads')
 
     print("Train all layers")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=40,
+                epochs=epoch[1],
                 augmentation=augmentation,
                 layers='all')
 
@@ -423,6 +423,12 @@ if __name__ == '__main__':
     parser.add_argument('--subset', required=False,
                         metavar="Dataset sub-directory",
                         help="Subset of dataset to run prediction on")
+    parser.add_argument('--mask_weight', required=False,
+                        metavar=3,
+                        help="weight for mask loss")
+    parser.add_argument('--epoch', required=False,
+                        metavar=[20, 40],
+                        help="epoch for training heads and all")
     args = parser.parse_args()
 
     # Validate arguments
@@ -447,10 +453,10 @@ if __name__ == '__main__':
     # Create model
     if args.command == "train":
         model = modellib.MaskRCNN_mask(mode="training", config=config,
-                                       model_dir=args.logs, mask_weight=10)
+                                       model_dir=args.logs, mask_weight=args.mask_weight)
     else:
         model = modellib.MaskRCNN_mask(mode="inference", config=config,
-                                       model_dir=args.logs, mask_weight=10)
+                                       model_dir=args.logs, mask_weight=args.mask_weight)
 
     # Select weights file to load
     if args.weights.lower() == "coco":
@@ -480,7 +486,7 @@ if __name__ == '__main__':
 
     # Train or evaluate
     if args.command == "train":
-        train(model)
+        train(model, args.epoch)
     elif args.command == "detect":
         detect(model, args.dataset, args.subset)
     else:
