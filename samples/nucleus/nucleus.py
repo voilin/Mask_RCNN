@@ -334,6 +334,8 @@ def rle_decode(rle, shape):
 def mask_to_rle(image_id, mask, scores):
     "Encodes instance masks to submission format."
     assert mask.ndim == 3, "Mask must be [H, W, count]"
+    print(mask)
+    print(scores)
     # Remove mask overlaps
     # Multiply each instance mask by its score order
     # then take the maximum across the last dimension
