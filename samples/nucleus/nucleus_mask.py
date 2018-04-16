@@ -199,7 +199,7 @@ class NucleusDataset(utils.Dataset):
         # "val": use hard-coded list above
         # "train": use data from stage1_train minus the hard-coded list above
         # else: use the data from the specified sub-directory
-        assert subset in ["train", "val", "stage1_train", "stage1_test", "stage2_test", "stage2_train"]
+        assert subset in ["train", "val", "stage1_train", "stage1_test", "stage2_test_final", "stage2_train"]
         subset_dir = "stage2_train" if subset in ["train", "val"] else subset
         dataset_dir = os.path.join(dataset_dir, subset_dir)
         if subset == "val":
